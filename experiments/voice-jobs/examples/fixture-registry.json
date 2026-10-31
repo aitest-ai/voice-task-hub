@@ -1,0 +1,21 @@
+{
+  "fixture_only": true,
+  "voices": {
+    "fixture": {
+      "consent_id": "fixture-only",
+      "synthesis_authorized": true,
+      "revoked": false,
+      "authorization_evidence_id": "fixture-no-person",
+      "expires_at": "2099-01-01T00:00:00Z",
+      "output_redistribution_allowed": false,
+      "engine": "breezyvoice",
+      "locale": "zh-TW",
+      "allowed_purposes": [
+        "technical_evaluation"
+      ],
+      "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "engine_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "reference_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  }
+}

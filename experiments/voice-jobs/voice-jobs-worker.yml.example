@@ -1,0 +1,45 @@
+# DISABLED TEMPLATE. Do not rename/enable until private repo, protected environment,
+# trusted runner, approved voice rights and costs have been explicitly configured.
+name: Approved Private Voice Worker
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Approved private job file stem (lowercase letters/numbers/underscore/hyphen)
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: approved-voice-worker
+  cancel-in-progress: false
+jobs:
+  synthesize:
+    if: github.event.repository.private && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    environment: approved-private-voice
+    runs-on: [self-hosted, approved-voice-worker]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate trusted task selection and run approved offline worker
+        shell: bash
+        env:
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          set -euo pipefail
+          [[ "$JOB_ID" =~ ^[a-z0-9][a-z0-9_-]{0,63}$ ]] || exit 1
+          # These worker-local settings must already exist. No secrets from task JSON.
+          python3 experiments/voice-jobs/voice_jobs.py run "private-jobs/$JOB_ID.json" \
+            --registry /private/voice-registry.json --worker-config /private/worker.json \
+            --output /private/voice-results > "$RUNNER_TEMP/result-path.txt"
+          result="$(cat "$RUNNER_TEMP/result-path.txt")"
+          echo "VOICE_RESULT=$result" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: voice-${{ inputs.job_id }}
+          path: ${{ env.VOICE_RESULT }}/
+          if-no-files-found: error
+          retention-days: 7
+# Replace action tags with reviewed full commit SHAs before activation.
+# This template only uploads to private repository; do not add raw audio to Git.

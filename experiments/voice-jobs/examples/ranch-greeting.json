@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "project_id": "ranch",
+  "job_id": "greeting",
+  "revision": "v1",
+  "engine": "breezyvoice",
+  "locale": "zh-TW",
+  "voice_id": "fixture",
+  "consent_id": "fixture-only",
+  "purpose": "technical_evaluation",
+  "content_class": "public_fixture",
+  "lines": [
+    {
+      "id": "hello",
+      "text": "你好，歡迎來到牧場。",
+      "emotion": "natural",
+      "strength": 0
+    }
+  ]
+}

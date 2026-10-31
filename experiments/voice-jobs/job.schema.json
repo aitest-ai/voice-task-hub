@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Voice Job v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "job_id",
+    "revision",
+    "engine",
+    "locale",
+    "voice_id",
+    "consent_id",
+    "purpose",
+    "content_class",
+    "lines"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "voice_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "consent_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "engine": {
+      "enum": [
+        "breezyvoice",
+        "indextts"
+      ]
+    },
+    "locale": {
+      "const": "zh-TW"
+    },
+    "purpose": {
+      "enum": [
+        "technical_evaluation",
+        "production",
+        "commercial"
+      ]
+    },
+    "content_class": {
+      "enum": [
+        "public_fixture",
+        "private"
+      ]
+    },
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "emotion",
+          "strength"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "emotion": {
+            "enum": [
+              "natural",
+              "happy",
+              "angry",
+              "sad",
+              "afraid",
+              "disgusted",
+              "melancholic",
+              "surprised",
+              "calm"
+            ]
+          },
+          "strength": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "engine": {
+            "const": "breezyvoice"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "lines": {
+            "items": {
+              "properties": {
+                "emotion": {
+                  "const": "natural"
+                },
+                "strength": {
+                  "const": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
